@@ -72,7 +72,7 @@ namespace Oauth2Login.Service
         public string gender { get; set; }
         public string picture { get; set; }
         public string locale { get; set; }
-        public int timezone { get; set; }
+        public decimal timezone { get; set; }
         public bool verified { get; set; }
 
         // override
