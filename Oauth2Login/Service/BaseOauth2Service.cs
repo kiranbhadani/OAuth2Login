@@ -19,6 +19,8 @@ namespace Oauth2Login.Service
             _client = oClient;
         }
 
+        public string StateParams { get; set; }
+
         public void CreateOAuthClient(IOAuthContext oContext)
         {
             _client = oContext.Client;
@@ -84,6 +86,11 @@ namespace Oauth2Login.Service
 
             _client.Token = tokenResult;
 
+            if (this.StateParams == null && !string.IsNullOrEmpty(request.QueryString["state"]))
+            {
+                this.StateParams = DecodeStateParams(request.QueryString["state"]);
+            }
+
             // client profile
             RequestUserProfile();
 
@@ -112,5 +119,16 @@ namespace Oauth2Login.Service
 
         public BaseUserData UserData { get; set; }
         public string UserDataJsonSource { get; set; }
+
+        protected string EncodeStateParams(string param)
+        {
+            return Convert.ToBase64String(Encoding.Unicode.GetBytes(param));
+        }
+
+        protected string DecodeStateParams(string param)
+        {
+            return Encoding.Unicode.GetString(Convert.FromBase64String(param));
+        }
     }
+
 }

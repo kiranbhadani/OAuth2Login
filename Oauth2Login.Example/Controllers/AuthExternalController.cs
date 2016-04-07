@@ -23,6 +23,7 @@ namespace MultipleOauth2Mvc.Controllers
 
             if (service != null)
             {
+                service.StateParams = "{returnUrl:'http://www.google.com'}";
                 var url = service.BeginAuthentication();
 
                 if (mode.HasValue)

@@ -6,6 +6,7 @@ using System.Web;
 using Newtonsoft.Json;
 using Oauth2Login.Client;
 using Oauth2Login.Core;
+using System.Text;
 
 namespace Oauth2Login.Service
 {
@@ -21,7 +22,7 @@ namespace Oauth2Login.Service
                 "client_id", _client.ClientId,
                 "redirect_uri", _client.CallBackUrl,
                 "scope", _client.Scope,
-                "state", "",
+                "state", !string.IsNullOrEmpty(StateParams) ? EncodeStateParams(StateParams) : "",
                 "display", "page"
                 );
 
