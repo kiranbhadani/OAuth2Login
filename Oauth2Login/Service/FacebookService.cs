@@ -23,7 +23,7 @@ namespace Oauth2Login.Service
                 "redirect_uri", _client.CallBackUrl,
                 "scope", _client.Scope,
                 "state", !string.IsNullOrEmpty(StateParams) ? EncodeStateParams(StateParams) : "",
-                "display", "page"
+                "display", HttpContext.Current.Request["modal"] == "1" ? "popup" : "page"
                 );
 
             _oauthUrl = "https://www.facebook.com/dialog/oauth?" + qstring;
