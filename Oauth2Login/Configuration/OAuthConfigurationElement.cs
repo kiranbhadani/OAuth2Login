@@ -39,5 +39,17 @@ namespace Oauth2Login.Configuration
         {
             get { return base["endpoint"].ToString(); }
         }
+
+        [ConfigurationProperty("version", IsRequired = false)]
+        public string Version
+        {
+            get { return base["version"].ToString(); }
+        }
+
+        [ConfigurationProperty("fields", IsRequired = false)]
+        public string Fields
+        {
+            get { return base["fields"].ToString(); }
+        }
     }
 }

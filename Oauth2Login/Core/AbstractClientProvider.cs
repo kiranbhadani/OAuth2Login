@@ -19,7 +19,9 @@ namespace Oauth2Login.Core
             CallBackUrl = ccOauth.CallbackUrl;
             Scope = ccOauth.Scope;
             Endpoint = ccOauth.Endpoint;
-            
+            Version = ccOauth.Version;
+            Fields = ccOauth.Fields;
+
             //AcceptedRedirectUrl = ccRoot.AcceptedRedirectUrl;
             FailedRedirectUrl = ccRoot.FailedRedirectUrl;
             Proxy = ccRoot.Proxy;
@@ -30,6 +32,8 @@ namespace Oauth2Login.Core
         public string CallBackUrl { get; set; }
         public string Scope { get; set; }
         public string Endpoint { get; set; }
+        public string Version { get; set; }
+        public string Fields { get; set; }
 
         //public string AcceptedRedirectUrl { get; set; }
         public string FailedRedirectUrl { get; set; }

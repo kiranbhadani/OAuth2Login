@@ -26,7 +26,14 @@ namespace Oauth2Login.Service
                 "display", HttpContext.Current.Request["modal"] == "1" ? "popup" : "page"
                 );
 
-            _oauthUrl = "https://www.facebook.com/dialog/oauth?" + qstring;
+            if (!string.IsNullOrEmpty(_client.Version))
+            {
+                _oauthUrl = "https://www.facebook.com/" + _client.Version + "/dialog/oauth?" + qstring;
+            }
+            else
+            {
+                _oauthUrl = "https://www.facebook.com/dialog/oauth?" + qstring;
+            }
 
             return _oauthUrl;
         }
@@ -37,7 +44,16 @@ namespace Oauth2Login.Service
             if (String.IsNullOrEmpty(code))
                 return OAuth2Consts.ACCESS_DENIED;
 
-            string tokenUrl = string.Format("https://graph.facebook.com/oauth/access_token?");
+            string tokenUrl;
+            if (!string.IsNullOrEmpty(_client.Version))
+            {
+                tokenUrl = "https://graph.facebook.com/" + _client.Version + "/oauth/access_token?";
+            }
+            else
+            {
+                tokenUrl = "https://graph.facebook.com/oauth/access_token?";
+            }
+
             string postData = QueryStringBuilder.Build(
                 "client_id", _client.ClientId,
                 "redirect_uri", _client.CallBackUrl,
@@ -46,13 +62,30 @@ namespace Oauth2Login.Service
             );
 
             string resonseJson = HttpPost(tokenUrl, postData);
-            resonseJson = "{\"" + resonseJson.Replace("=", "\":\"").Replace("&", "\",\"") + "\"}";
+            if (!resonseJson.StartsWith("{"))
+            {
+                resonseJson = "{\"" + resonseJson.Replace("=", "\":\"").Replace("&", "\",\"") + "\"}";
+            }
+
             return JsonConvert.DeserializeAnonymousType(resonseJson, new { access_token = "" }).access_token;
         }
 
         public override void RequestUserProfile()
         {
-            string profileUrl = "https://graph.facebook.com/me?access_token=" + _client.Token;
+            string profileUrl;
+            if (!string.IsNullOrEmpty(_client.Version))
+            {
+                profileUrl = "https://graph.facebook.com/" + _client.Version + "/me?access_token=" + _client.Token;
+            }
+            else
+            {
+                profileUrl = "https://graph.facebook.com/me?access_token=" + _client.Token;
+            }
+
+            if (!string.IsNullOrEmpty(_client.Fields))
+            {
+                profileUrl = profileUrl + "&fields=" + _client.Fields;
+            }
 
             string result = HttpGet(profileUrl);
 
